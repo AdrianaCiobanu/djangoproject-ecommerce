@@ -1,0 +1,1 @@
+from .celeryy import celery

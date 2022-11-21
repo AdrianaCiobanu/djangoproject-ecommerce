@@ -1,4 +1,6 @@
+# from django.core.mail import send_mail, BadHeaderError, EmailMessage
 from django.shortcuts import render
+from .tasks import notify_customers
 # from django.db.models import Q, F, DecimalField
 # from django.db.models.aggregates import Count
 # from django.db.models.functions import Concat
@@ -6,9 +8,21 @@ from django.shortcuts import render
 # from django.contrib.contenttypes.models import ContentType
 # from store.models import Product, OrderItem, Customer, Collection
 # from tags.models import TaggedItem
+# from templated_mail.mail import BaseEmailMessage
 
 
 def say_hello(request):
+    notify_customers.delay('Hello')
+    return render(request, 'hello.html', {'name': 'Dana'})
+    # try:
+    #     message = BaseEmailMessage(
+    #         template_name='emails/hello.html',
+    #         context={'name': 'Dana'}
+    #     )
+    #     message.send(['ciobanu.dana.adriana@gmail.com'])
+    # except BadHeaderError:
+    #     pass
+
     # collection = Collection()
     # collection_title = 'Video Games'
     # collection.featured_product = Product(pk=1)
@@ -37,4 +51,4 @@ def say_hello(request):
     # content_type = ContentType.objects.get_for_model(Product)
     # queryset = TaggedItem.objects.select_related('tag').filter(content_type=content_type, object_id=1)
 
-    return render(request, 'hello.html', {'name': 'Dana'})
+
